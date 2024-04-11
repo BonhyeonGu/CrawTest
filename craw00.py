@@ -40,7 +40,12 @@ class Craw00():
 
     def work(self):
         res = list()
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")  # Headless 모드 활성화
+        chrome_options.add_argument("--no-sandbox")  # Sandbox 프로세스 사용 안 함
+        chrome_options.add_argument("--disable-dev-shm-usage")  # /dev/shm 파티션 사용 안 함
+        chrome_options.add_argument("--disable-gpu")  # GPU 가속 사용 안 함
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         driver.get('https://arca.live/b/airsoft2077?category=%EB%8D%94%ED%8C%90%2F%EB%8D%94%EA%B5%AC')
         if len(self.stack) == 0:
             for i in range(self.stack_size):
