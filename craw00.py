@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 
 class Craw00():
     def __init__(self, bot):
@@ -50,15 +51,15 @@ class Craw00():
         driver.get('https://arca.live/b/airsoft2077?category=%EB%8D%94%ED%8C%90%2F%EB%8D%94%EA%B5%AC')
         if len(self.stack) == 0:
             for i in range(self.stack_size):
-                title = driver.find_element_by_xpath(f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div[1]/div[1]/span[2]/span[2]").text
-                href = driver.find_element_by_xpath(f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
+                title = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div[1]/div[1]/span[2]/span[2]").text
+                href = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
                 if self.anyCon(title):
                     res.append({"title": title, "href": href})
                 self.stack.append(title)
         else:
             for i in range(self.stack_size):
-                title = driver.find_element_by_xpath(f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div[1]/div[1]/span[2]/span[2]").text
-                href = driver.find_element_by_xpath(f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
+                title = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div[1]/div[1]/span[2]/span[2]").text
+                href = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
                 if self.anyCon(title) and title not in self.stack:
                     res.append({"title": title, "href": href})
                 self.stack[i] = title
