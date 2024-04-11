@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  centosPythonSSL:
+    image: Dockerfile
+    entrypoint: ["/bin/bash", "-c", "python3 app.py"]
+#    volumes:
+#      - type: bind
+#        source: /home/user01/Docker/CentosSSL/app
+#        target: /app
+    restart: always
