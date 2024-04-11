@@ -1,8 +1,9 @@
 version: '3.8'
 
 services:
-  centosPythonSSL:
-    image: Dockerfile
+  python:
+    container_name: 05DiscordBot
+    build: .
     entrypoint: ["/bin/bash", "-c", "python3 app.py"]
 #    volumes:
 #      - type: bind

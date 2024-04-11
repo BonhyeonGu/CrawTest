@@ -7,7 +7,12 @@ from discord.ext import tasks, commands
 from private import BOT_TOKEN
 from craw00 import Craw00
 
-bot = commands.Bot(command_prefix='!')
+intents = discord.Intents.default()  # 기본 intents 활성화
+intents.messages = True  # 메시지 관련 이벤트 수신을 위해 활성화
+intents.guilds = True  # 서버(길드) 관련 이벤트 수신을 위해 활성화
+
+bot = commands.Bot(command_prefix='!', intents=intents)
+
 craw00 = Craw00(bot)
 tasks = {"craw00": craw00}
 
