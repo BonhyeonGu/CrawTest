@@ -12,7 +12,7 @@ class Craw00():
         self.is_running = False
         self.bot = bot
         self.notice_size = 5
-        self.patterns = ["그레이", "회색", "그래이", "grey", "mcx", "스피어", "MCX", "레거시"]
+        self.patterns = ["그레이", "회색", "그래이", "grey", "mcx", "스피어", "MCX", "레거시", "엠야스", "앰야스", "톡시"]
 
 
     async def run(self, channel_id):
@@ -52,6 +52,5 @@ class Craw00():
         href = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
         if self.anyCon(title):
             res.append({"title": title, "href": href})
-        self.stack.append(title)
         driver.quit()
         return res
