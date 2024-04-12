@@ -11,8 +11,6 @@ class Craw00():
     def __init__(self, bot):
         self.is_running = False
         self.bot = bot
-        self.stack = list()
-        self.stack_size = 5
         self.notice_size = 5
         self.patterns = ["그레이", "회색", "그래이", "grey", "mcx", "스피어", "MCX", "레거시"]
 
@@ -30,7 +28,7 @@ class Craw00():
                         href = item.get("href")
                         message = f"제목: {title}\n링크: {href}"
                         await channel.send(message)
-            await asyncio.sleep(random.uniform(8.9, 21.3))
+            await asyncio.sleep(random.uniform(5.9, 11.3))
 
 
     def anyCon(self, target):
@@ -49,20 +47,11 @@ class Craw00():
         chrome_options.add_argument("--disable-gpu")  # GPU 가속 사용 안 함
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         driver.get('https://arca.live/b/airsoft2077?category=%EB%8D%94%ED%8C%90%2F%EB%8D%94%EA%B5%AC')
-        if len(self.stack) == 0:
-            for i in range(self.stack_size):
-                title = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div[1]/div[1]/span[2]/span[2]").text
-                href = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
-                if self.anyCon(title):
-                    res.append({"title": title, "href": href})
-                self.stack.append(title)
-        else:
-            for i in range(self.stack_size):
-                title = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div[1]/div[1]/span[2]/span[2]").text
-                href = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
-                if self.anyCon(title) and title not in self.stack:
-                    res.append({"title": title, "href": href})
-                self.stack[i] = title
-
+        i = 0
+        title = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div[1]/div[1]/span[2]/span[2]").text
+        href = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
+        if self.anyCon(title):
+            res.append({"title": title, "href": href})
+        self.stack.append(title)
         driver.quit()
         return res
