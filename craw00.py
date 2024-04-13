@@ -4,8 +4,11 @@ import asyncio
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 class Craw00():
     def __init__(self, bot):
@@ -49,12 +52,21 @@ class Craw00():
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         driver.get('https://arca.live/b/airsoft2077?category=%EB%8D%94%ED%8C%90%2F%EB%8D%94%EA%B5%AC')
         i = 0
-        title = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div[1]/div[1]/span[2]/span[2]").text
-        href = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
-        pid = driver.find_element(By.XPATH,f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div/div[1]/span[1]/span").text
-        if self.anyCon(title) and pid != self.lastID :
-            res.append({"title": title, "href": href})
-            self.lastID = pid
-
-        driver.quit()
+        try:
+            # 요소가 로드될 때까지 최대 10초간 대기
+            element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div[1]/div[1]/span[2]/span[2]"))
+            )
+            title = element.text
+            href = driver.find_element(By.XPATH, f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
+            pid = driver.find_element(By.XPATH, f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div/div[1]/span[1]/span").text
+            if self.anyCon(title) and pid != self.lastID:
+                res.append({"title": title, "href": href})
+                self.lastID = pid
+        except NoSuchElementException:
+            print("Element not found.")
+        except TimeoutException:
+            print("Loading took too much time.")
+        finally:
+            driver.quit()
         return res
