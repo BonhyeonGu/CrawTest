@@ -15,7 +15,7 @@ class Craw00():
         self.is_running = False
         self.bot = bot
         self.notice_size = 5
-        self.patterns = ["그레이", "회색", "그래이", "grey", "mcx", "MCX", "cqr", "CQR", "헤라암즈", "해라암즈", "evo", "EVO"]
+        self.patterns = ["그레이", "회색", "그래이", "grey", "mcx", "MCX", "cqr", "CQR", "헤라암즈", "해라암즈", "evo", "EVO", "소음기"]
         self.lastID = ''
 
 
