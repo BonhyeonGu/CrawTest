@@ -15,7 +15,7 @@ class Craw00():
         self.is_running = False
         self.bot = bot
         self.notice_size = 5
-        self.patterns = ["그레이", "회색", "그래이", "grey", "mcx", "스피어", "MCX", "레거시"]
+        self.patterns = ["그레이", "회색", "그래이", "grey", "mcx", "MCX", "cqr", "CQR", "헤라암즈", "해라암즈", "evo", "EVO"]
         self.lastID = ''
 
 
@@ -32,7 +32,7 @@ class Craw00():
                         href = item.get("href")
                         message = f"제목: {title}\n링크: {href}"
                         await channel.send(message)
-            await asyncio.sleep(random.uniform(5.9, 11.3))
+            await asyncio.sleep(random.uniform(60.9, 120.3))
 
 
     def anyCon(self, target):
@@ -54,7 +54,7 @@ class Craw00():
         i = 0
         try:
             # 요소가 로드될 때까지 최대 10초간 대기
-            element = WebDriverWait(driver, 10).until(
+            element = WebDriverWait(driver, 60).until(
                 EC.presence_of_element_located((By.XPATH, f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div[1]/div[1]/span[2]/span[2]"))
             )
             title = element.text
