@@ -49,7 +49,7 @@ class Craw00():
 
 
     def anyCon(self, patterns, target):
-        for pattern in self.patterns:
+        for pattern in patterns:
             if pattern in target:
                 return True
         return False
