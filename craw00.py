@@ -20,6 +20,7 @@ class Craw00():
         self.patterns00 = ["그레이", "회색", "그래이", "grey", "mcx", "MCX", "cqr", "CQR", "헤라암즈", "해라암즈", "evo", "EVO", "소음기"]
         self.lastID00 = ''
         self.lastID01 = ''
+        self.lastID02 = ''
 
 
     async def run(self, channel_id):
@@ -38,6 +39,16 @@ class Craw00():
             await asyncio.sleep(random.uniform(self.delayRange[0], self.delayRange[1]))
             if channel:
                 res = self.work01()
+                if res is not None and len(res) > 0:
+                    # res 리스트의 각 항목에 대해 메시지 포맷팅 및 전송
+                    for item in res:
+                        title = item.get("title")
+                        href = item.get("href")
+                        message = f"제목: {title}\n링크: {href}"
+                        await channel.send(message)
+            await asyncio.sleep(random.uniform(self.delayRange[0], self.delayRange[1]))
+            if channel:
+                res = self.work02()
                 if res is not None and len(res) > 0:
                     # res 리스트의 각 항목에 대해 메시지 포맷팅 및 전송
                     for item in res:
@@ -113,3 +124,34 @@ class Craw00():
         finally:
             driver.quit()
         return res
+    
+
+    def work02(self):
+        res = list()
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")  # Headless 모드 활성화
+        chrome_options.add_argument("--no-sandbox")  # Sandbox 프로세스 사용 안 함
+        chrome_options.add_argument("--disable-dev-shm-usage")  # /dev/shm 파티션 사용 안 함
+        chrome_options.add_argument("--disable-gpu")  # GPU 가속 사용 안 함
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+        driver.get('https://arca.live/b/airsoft2077?category=%EB%8D%94%ED%8C%90%2F%EB%8D%94%EA%B5%AC&target=all&keyword=uh-1')
+        i = 0
+        try:
+            # 요소가 로드될 때까지 최대 10초간 대기
+            element = WebDriverWait(driver, self.waitTime).until(
+                EC.presence_of_element_located((By.XPATH, f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div[1]/div[1]/span[2]/span[2]"))
+            )
+            title = element.text
+            href = driver.find_element(By.XPATH, f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
+            pid = driver.find_element(By.XPATH, f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div/div[1]/span[1]/span").text
+            if self.lastID02 != '' and pid != self.lastID02:
+                res.append({"title": title, "href": href})
+            self.lastID02 = pid
+        except NoSuchElementException:
+            print("Element not found.")
+        except TimeoutException:
+            print("Loading took too much time.")
+        finally:
+            driver.quit()
+        return res
+    
