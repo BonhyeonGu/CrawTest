@@ -17,7 +17,8 @@ class Craw00():
         self.delayRange = [60.7, 120.9]
         self.notice_size = 5
         self.waitTime = 600
-        self.patterns00 = ["그레이", "회색", "그래이", "grey", "mcx", "MCX", "cqr", "CQR", "헤라암즈", "해라암즈", "evo", "EVO", "소음기"]
+        self.patternAnti00 = ["더구", "ㄷㄱ"]
+        self.patterns00 = ["그레이", "회색", "그래이", "grey", "evo", "EVO"]
         self.lastID00 = ''
         self.lastID01 = ''
         self.lastID02 = ''
@@ -64,7 +65,12 @@ class Craw00():
             if pattern in target:
                 return True
         return False
-
+    
+    def noneCon(patterns, target):
+        for pattern in patterns:
+            if pattern in target:
+                return False
+        return True
 
     def work00(self):
         res = list()
@@ -84,7 +90,7 @@ class Craw00():
             title = element.text
             href = driver.find_element(By.XPATH, f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
             pid = driver.find_element(By.XPATH, f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div/div[1]/span[1]/span").text
-            if self.anyCon(self.patterns00, title) and pid != self.lastID00:
+            if self.anyCon(self.patterns00, title) and pid != self.lastID00 and self.noneCon(self.patternAnti00, title):
                 res.append({"title": title, "href": href})
                 self.lastID00 = pid
         except NoSuchElementException:
@@ -114,7 +120,7 @@ class Craw00():
             title = element.text
             href = driver.find_element(By.XPATH, f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
             pid = driver.find_element(By.XPATH, f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div/div[1]/span[1]/span").text
-            if self.lastID01 != '' and pid != self.lastID01:
+            if self.lastID01 != '' and pid != self.lastID01 and self.noneCon(self.patternAnti00, title):
                 res.append({"title": title, "href": href})
             self.lastID01 = pid
         except NoSuchElementException:
@@ -134,7 +140,7 @@ class Craw00():
         chrome_options.add_argument("--disable-dev-shm-usage")  # /dev/shm 파티션 사용 안 함
         chrome_options.add_argument("--disable-gpu")  # GPU 가속 사용 안 함
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
-        driver.get('https://arca.live/b/airsoft2077?category=%EB%8D%94%ED%8C%90%2F%EB%8D%94%EA%B5%AC&target=all&keyword=uh-1')
+        driver.get('https://arca.live/b/airsoft2077?category=%EB%8D%94%ED%8C%90%2F%EB%8D%94%EA%B5%AC&target=all&keyword=%EC%9C%A0%EB%8B%88%ED%8B%B0')
         i = 0
         try:
             # 요소가 로드될 때까지 최대 10초간 대기
@@ -144,7 +150,7 @@ class Craw00():
             title = element.text
             href = driver.find_element(By.XPATH, f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]").get_attribute('href')
             pid = driver.find_element(By.XPATH, f"/html/body/div[2]/div[3]/article/div/div[6]/div[2]/a[{self.notice_size + 1 + i}]/div/div[1]/span[1]/span").text
-            if self.lastID02 != '' and pid != self.lastID02:
+            if self.lastID02 != '' and pid != self.lastID02 and self.noneCon(self.patternAnti00, title):
                 res.append({"title": title, "href": href})
             self.lastID02 = pid
         except NoSuchElementException:
