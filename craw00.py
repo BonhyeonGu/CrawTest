@@ -66,7 +66,7 @@ class Craw00():
                 return True
         return False
     
-    def noneCon(patterns, target):
+    def noneCon(self, patterns, target):
         for pattern in patterns:
             if pattern in target:
                 return False
