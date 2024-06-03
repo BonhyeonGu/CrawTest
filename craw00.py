@@ -18,7 +18,7 @@ class Craw00():
         self.notice_size = 5
         self.waitTime = 600
         self.patternAnti00 = ["더구", "ㄷㄱ"]
-        self.patterns00 = ["그레이", "회색", "그래이", "grey", "evo", "EVO"]
+        self.patterns00 = ["그레이", "회색", "그래이", "grey", "군장", "헬멧"]
         self.lastID00 = ''
         self.lastID01 = ''
         self.lastID02 = ''
@@ -38,6 +38,7 @@ class Craw00():
                         message = f"제목: {title}\n링크: {href}"
                         await channel.send(message)
             await asyncio.sleep(random.uniform(self.delayRange[0], self.delayRange[1]))
+            '''
             if channel:
                 res = self.work01()
                 if res is not None and len(res) > 0:
@@ -58,6 +59,7 @@ class Craw00():
                         message = f"제목: {title}\n링크: {href}"
                         await channel.send(message)
             await asyncio.sleep(random.uniform(self.delayRange[0], self.delayRange[1]))
+            '''
 
 
     def anyCon(self, patterns, target):
